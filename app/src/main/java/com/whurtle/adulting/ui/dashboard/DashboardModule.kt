@@ -11,8 +11,8 @@ val dashboardModule = module {
 
     //scoped router hehe
     scope(named(Scope.DASHBOARD_MODULE_SCOPE.name)) {
-        scoped { DashboardRouter()}
-        scoped { DashboardPresenter()}
-        scoped { DashboardInteractor()}
+        scoped { DashboardRouter() as IDashboardRouter }
+        scoped { DashboardPresenter() as IDashboardPresenter }
+        scoped { DashboardInteractor() as IDashboardInteractor }
     }
 }

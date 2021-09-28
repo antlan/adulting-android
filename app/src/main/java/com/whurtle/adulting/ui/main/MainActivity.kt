@@ -19,7 +19,8 @@ class MainActivity : IMainView, AppCompatActivity() {
     val interactor: IMainInteractor
 
     init {
-        var scope = getKoin().createScope(SCOPE, named(SCOPE))
+        var scope =
+            getKoin().createScope(Scope.MAIN_MODULE_SCOPE.name, named(Scope.MAIN_MODULE_SCOPE.name))
         presenter = scope.get()
         router = scope.get()
         interactor = scope.get()
@@ -33,7 +34,7 @@ class MainActivity : IMainView, AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        getKoin().deleteScope(SCOPE)
+        getKoin().deleteScope(Scope.MAIN_MODULE_SCOPE.name)
     }
 
     override fun onAttachedToWindow() {

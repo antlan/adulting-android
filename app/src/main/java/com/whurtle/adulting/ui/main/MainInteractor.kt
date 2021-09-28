@@ -11,7 +11,7 @@ class MainInteractor : IMainInteractor {
     private var router: IMainRouter
 
     init {
-        var scope = KoinJavaComponent.getKoin().getScope(SCOPE)
+        var scope = KoinJavaComponent.getKoin().getScope(Scope.MAIN_MODULE_SCOPE.name)
         router = scope.get()
     }
 

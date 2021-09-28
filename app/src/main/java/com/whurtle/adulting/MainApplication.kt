@@ -3,6 +3,7 @@ package com.whurtle.adulting
 import android.app.Application
 import android.os.Bundle
 import com.whurtle.adulting.ui.dashboard.dashboardModule
+import com.whurtle.adulting.ui.inventory.inventoryModule
 import com.whurtle.adulting.ui.main.mainModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -20,7 +21,8 @@ class MainApplication : Application() {
             modules(
                 //UI
                 mainModule,
-                dashboardModule
+                dashboardModule,
+                inventoryModule
             )
         }
 
