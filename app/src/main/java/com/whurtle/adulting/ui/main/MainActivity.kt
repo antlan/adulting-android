@@ -4,8 +4,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.whurtle.adulting.R
 import org.koin.android.ext.android.getKoin
-import org.koin.android.ext.android.inject
-import org.koin.androidx.scope.scope
 import org.koin.core.qualifier.named
 
 interface IMainView {
@@ -29,7 +27,7 @@ class MainActivity : IMainView, AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         router.setWeakReference(this)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.main_activity)
     }
 
     override fun onDestroy() {

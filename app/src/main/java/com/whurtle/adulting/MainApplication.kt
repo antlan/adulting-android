@@ -4,6 +4,8 @@ import android.app.Application
 import android.os.Bundle
 import com.whurtle.adulting.ui.dashboard.dashboardModule
 import com.whurtle.adulting.ui.inventory.inventoryModule
+import com.whurtle.adulting.ui.inventory.inventoryStoreModule
+import com.whurtle.adulting.ui.inventory.item.create.createItemModule
 import com.whurtle.adulting.ui.main.mainModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -19,10 +21,13 @@ class MainApplication : Application() {
             androidLogger()
             androidContext(this@MainApplication)
             modules(
-                //UI
+                // UI
                 mainModule,
                 dashboardModule,
-                inventoryModule
+                inventoryModule,
+                createItemModule,
+                // Stores
+                inventoryStoreModule
             )
         }
 

@@ -1,18 +1,16 @@
-package com.whurtle.adulting.ui.inventory
+package com.whurtle.adulting.ui.inventory.item.create
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.whurtle.adulting.R
-import com.whurtle.adulting.ui.inventory.item.create.CreateItemFragment
 import java.lang.ref.WeakReference
 
-interface IInventoryRouter {
+interface ICreateItemRouter {
     fun setWeakReference(reference: Fragment)
-    fun gotoCreateItemView()
-
+    fun gotoInventoryView()
 }
 
-class InventoryRouter : IInventoryRouter {
+class CreateItemRouter : ICreateItemRouter {
 
     var createItemFragment: CreateItemFragment? = null
 
@@ -22,7 +20,7 @@ class InventoryRouter : IInventoryRouter {
         viewWeakReference = WeakReference(reference)
     }
 
-    override fun gotoCreateItemView() {
+    override fun gotoInventoryView() {
         if (createItemFragment == null) {
             createItemFragment = CreateItemFragment()
         }

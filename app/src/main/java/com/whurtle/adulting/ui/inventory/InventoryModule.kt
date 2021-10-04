@@ -11,8 +11,8 @@ val inventoryModule = module {
 
     //scoped router hehe
     scope(named(Scope.INVENTORY_MODULE_SCOPE.name)) {
-        scoped { InventoryRouter() }
-        scoped { InventoryPresenter() }
-        scoped { InventoryInteractor() }
+        scoped { InventoryRouter() as IInventoryRouter }
+        scoped { InventoryPresenter() as IInventoryPresenter }
+        scoped { InventoryInteractor() as IInventoryInteractor }
     }
 }
