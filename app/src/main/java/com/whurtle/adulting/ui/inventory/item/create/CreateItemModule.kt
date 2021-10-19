@@ -11,8 +11,8 @@ val createItemModule = module {
 
     //scoped router hehe
     scope(named(Scope.CREATE_ITEM_MODULE_SCOPE.name)) {
-        scoped { CreateItemRouter() as ICreateItemRouter }
-        scoped { CreateItemPresenter() as ICreateItemPresenter }
-        scoped { CreateItemInteractor() as ICreateItemInteractor }
+        scoped<ICreateItemRouter> { CreateItemRouter() }
+        scoped<ICreateItemPresenter> { CreateItemPresenter() }
+        scoped<ICreateItemInteractor> { CreateItemInteractor() }
     }
 }

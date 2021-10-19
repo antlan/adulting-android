@@ -1,17 +1,16 @@
-package com.whurtle.adulting.ui.inventory.item.create
+package com.whurtle.adulting.ui.inventory.item.view
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import com.whurtle.adulting.R
 import timber.log.Timber
 import java.lang.ref.WeakReference
 
-interface ICreateItemRouter {
+interface IViewItemRouter {
     fun setWeakReference(reference: Fragment)
     fun goBack()
 }
 
-class CreateItemRouter : ICreateItemRouter {
+class ViewItemRouter : IViewItemRouter {
 
     var viewWeakReference: WeakReference<Fragment>? = null
 

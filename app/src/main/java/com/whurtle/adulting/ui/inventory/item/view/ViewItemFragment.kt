@@ -1,43 +1,56 @@
-package com.whurtle.adulting.ui.inventory.item.create
+package com.whurtle.adulting.ui.inventory.item.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AutoCompleteTextView
 import androidx.fragment.app.Fragment
-import com.whurtle.adulting.R
-import com.whurtle.adulting.databinding.CreateItemFragmentBinding
+import com.whurtle.adulting.databinding.ViewItemFragmentBinding
 import android.widget.ArrayAdapter
+import com.whurtle.adulting.store.inventory.Item
 import org.koin.android.ext.android.getKoin
 import org.koin.core.qualifier.named
 
 
-interface ICreateItemView {
+interface IViewItemView {
 }
 
-class CreateItemFragment : ICreateItemView, Fragment() {
+class ViewItemFragment : IViewItemView, Fragment() {
 
-    private lateinit var binding: CreateItemFragmentBinding
 
-    private lateinit var presenter: ICreateItemPresenter
-    private lateinit var router: ICreateItemRouter
-    private lateinit var interactor: ICreateItemInteractor
+    private var item: Item? = null
+
+    private lateinit var binding: ViewItemFragmentBinding
+
+    private lateinit var interactor: IViewItemInteractor
+
+    companion object {
+        val KEY_ITEM = "item"
+
+        fun newInstance(item: Item): ViewItemFragment {
+            val fragment = ViewItemFragment()
+            val bundle = Bundle()
+            bundle.putParcelable(KEY_ITEM, item)
+            fragment.arguments = bundle
+            return fragment
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val scope = getKoin().createScope(
-            Scope.CREATE_ITEM_MODULE_SCOPE.name,
-            named(Scope.CREATE_ITEM_MODULE_SCOPE.name)
+            Scope.VIEW_ITEM_MODULE_SCOPE.name,
+            named(Scope.VIEW_ITEM_MODULE_SCOPE.name)
         )
-        presenter = scope.get()
-        router = scope.get()
         interactor = scope.get()
+
+        item = arguments?.getParcelable(KEY_ITEM)
+
     }
 
     override fun onDestroy() {
+        getKoin().deleteScope(Scope.VIEW_ITEM_MODULE_SCOPE.name)
         super.onDestroy()
-        getKoin().deleteScope(Scope.CREATE_ITEM_MODULE_SCOPE.name)
     }
 
     override fun onCreateView(
@@ -45,20 +58,19 @@ class CreateItemFragment : ICreateItemView, Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = CreateItemFragmentBinding.inflate(layoutInflater, container, false)
+        binding = ViewItemFragmentBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        router.setWeakReference(this)
+        interactor.initialize(this, this)
         initializeView()
     }
 
     fun initializeView() {
         val adapter: ArrayAdapter<String> =
             ArrayAdapter(this.requireContext(), android.R.layout.simple_list_item_1)
-        adapter.add("Apple")
-        adapter.add("Mango")
+        binding.nameInput.setText(item?.name)
         binding.nameInput.setAdapter(adapter)
         binding.submit.setOnClickListener {
             val name = binding.nameInput.text.toString()

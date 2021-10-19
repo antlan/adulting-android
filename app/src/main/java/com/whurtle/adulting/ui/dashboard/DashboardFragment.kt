@@ -16,8 +16,6 @@ class DashboardFragment : IDashboardView, Fragment() {
 
     private lateinit var binding: DashboardFragmentBinding
 
-    private lateinit var presenter: IDashboardPresenter
-    private lateinit var router: IDashboardRouter
     private lateinit var interactor: IDashboardInteractor
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,8 +24,6 @@ class DashboardFragment : IDashboardView, Fragment() {
             Scope.DASHBOARD_MODULE_SCOPE.name,
             named(Scope.DASHBOARD_MODULE_SCOPE.name)
         )
-        presenter = scope.get()
-        router = scope.get()
         interactor = scope.get()
     }
 
@@ -41,8 +37,8 @@ class DashboardFragment : IDashboardView, Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        router.setWeakReference(this)
         initializeView()
+        interactor.initialize(this, this)
     }
 
     override fun onDestroy() {
@@ -53,6 +49,10 @@ class DashboardFragment : IDashboardView, Fragment() {
     fun initializeView() {
         binding.inventoryButton.setOnClickListener {
             interactor.onInventoryButtonClicked()
+        }
+
+        binding.groceryButton.setOnClickListener{
+            interactor.onGroceryButtonClicked()
         }
     }
 

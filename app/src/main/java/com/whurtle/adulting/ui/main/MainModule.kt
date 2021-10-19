@@ -11,8 +11,8 @@ val mainModule = module {
 
     //scoped router hehe
     scope(named(Scope.MAIN_MODULE_SCOPE.name)) {
-        scoped { MainRouter() as IMainRouter }
-        scoped { MainPresenter() as IMainPresenter }
-        scoped { MainInteractor() as IMainInteractor }
+        scoped<IMainRouter> { MainRouter() }
+        scoped<IMainPresenter> { MainPresenter() }
+        scoped<IMainInteractor> { MainInteractor() }
     }
 }

@@ -5,5 +5,5 @@ import com.whurtle.adulting.store.inventory.InventoryStore
 import org.koin.dsl.module
 
 val inventoryStoreModule = module {
-    InventoryStore() as IInventoryStore
+    single<IInventoryStore> { InventoryStore() }
 }

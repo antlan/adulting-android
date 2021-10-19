@@ -1,4 +1,4 @@
-package com.whurtle.adulting.ui.inventory
+package com.whurtle.adulting.ui.grocery
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,29 +7,30 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
+import com.whurtle.adulting.databinding.GroceryFragmentBinding
+import com.whurtle.adulting.databinding.GroceryFragmentListItemBinding
 import com.whurtle.adulting.databinding.InventoryFragmentBinding
 import com.whurtle.adulting.databinding.InventoryFragmentListItemBinding
+import com.whurtle.adulting.store.grocery.GroceryItem
+import com.whurtle.adulting.store.grocery.GroceryItemFull
 import com.whurtle.adulting.store.inventory.Item
 import org.koin.android.ext.android.getKoin
 import org.koin.core.qualifier.named
 import timber.log.Timber
 
 
-interface IInventoryView {
+interface IGroceryView {
 
-    fun setInventoryListItems(items: List<Item>)
+    fun setInventoryListItems(items: List<GroceryItemFull>)
     fun clearListItems()
-    fun showMessage(message: String)
 
 }
 
-class InventoryFragment : Fragment(), IInventoryView, OnItemClickListener,
-    OnAddItemToGroceryListClickedListener {
+class GroceryFragment : Fragment(), IGroceryView, OnItemClickListener {
 
-    private lateinit var interactor: IInventoryInteractor
+    private lateinit var interactor: IGroceryInteractor
 
-    private lateinit var binding: InventoryFragmentBinding
+    private lateinit var binding: GroceryFragmentBinding
     private var adapter = InventoryItemListAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,7 +52,7 @@ class InventoryFragment : Fragment(), IInventoryView, OnItemClickListener,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = InventoryFragmentBinding.inflate(layoutInflater, container, false)
+        binding = GroceryFragmentBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
@@ -66,16 +67,12 @@ class InventoryFragment : Fragment(), IInventoryView, OnItemClickListener,
     }
 
     fun initializeView() {
-        binding.inventoryCreateItemButton.setOnClickListener {
-            interactor.onCreateItemButtonClicked()
-        }
         binding.itemList.layoutManager = LinearLayoutManager(this.requireContext())
         binding.itemList.adapter = adapter
         adapter.setItemClickListener(this)
-        adapter.setAddItemToGroceryListClickedListener(this)
     }
 
-    override fun setInventoryListItems(items: List<Item>) {
+    override fun setInventoryListItems(items: List<GroceryItemFull>) {
         Timber.d("From db ${items.size}")
         with(adapter) {
             setItems(items)
@@ -85,29 +82,19 @@ class InventoryFragment : Fragment(), IInventoryView, OnItemClickListener,
     override fun clearListItems() {
     }
 
-    override fun showMessage(message: String) {
-        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
-
-    }
-
-    override fun onClick(item: Item) {
+    override fun onClick(item: GroceryItemFull) {
         interactor.onItemClicked(item)
-    }
-
-    override fun onAddItemToGroceryListClick(item: Item) {
-        interactor.onAddItemToGroceryListClicked(item)
     }
 }
 
 
 class InventoryItemListAdapter : RecyclerView.Adapter<ItemViewHolder>() {
 
-    private val list: ArrayList<Item> = ArrayList()
+    private val list: ArrayList<GroceryItemFull> = ArrayList()
     private var listener: OnItemClickListener? = null
-    private var onAddToGroceryListener: OnAddItemToGroceryListClickedListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-        val binding = InventoryFragmentListItemBinding.inflate(LayoutInflater.from(parent.context))
+        val binding = GroceryFragmentListItemBinding.inflate(LayoutInflater.from(parent.context))
         return ItemViewHolder(binding)
     }
 
@@ -118,17 +105,13 @@ class InventoryItemListAdapter : RecyclerView.Adapter<ItemViewHolder>() {
             Timber.d("bind clicked")
             listener!!.onClick(item)
         }
-        holder.binding.addToGroceryListButton.setOnClickListener {
-            Timber.d("item clicked to add to grocery list")
-            onAddToGroceryListener!!.onAddItemToGroceryListClick(item)
-        }
     }
 
     override fun getItemCount(): Int {
         return list.size
     }
 
-    fun setItems(items: List<Item>) {
+    fun setItems(items: List<GroceryItemFull>) {
         list.clear()
         list.addAll(items)
         notifyDataSetChanged()
@@ -137,33 +120,26 @@ class InventoryItemListAdapter : RecyclerView.Adapter<ItemViewHolder>() {
     fun setItemClickListener(listener: OnItemClickListener) {
         this.listener = listener
     }
-
-    fun setAddItemToGroceryListClickedListener(listener: OnAddItemToGroceryListClickedListener) {
-        this.onAddToGroceryListener = listener
-    }
 }
 
-class ItemViewHolder(var binding: InventoryFragmentListItemBinding) :
+class ItemViewHolder(var binding: GroceryFragmentListItemBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(item: Item) {
-        binding.name.text = item.name
-        if (item.quantity == 0.0f) {
-            binding.stockCount.text = "x0"
-        } else if (item.quantity % 1.0 == 0.0) {
-            binding.stockCount.text = String.format("x%d", item.quantity.toLong())
-        } else {
-            binding.stockCount.text = String.format("x%0.2f", item.quantity)
-        }
+    fun bind(item: GroceryItemFull) {
+        binding.name.text = item.item.name
+//        if (item.quantity == 0.0f) {
+//            binding.stockCount.text = "x0"
+//        } else if (item.quantity % 1.0 == 0.0) {
+//            binding.stockCount.text = String.format("x%d", item.quantity.toLong())
+//        } else {
+//            binding.stockCount.text = String.format("x%0.2f", item.quantity)
+//        }
 
-        Timber.d("binding item ${item.name}")
+        Timber.d("binding item ${item.item.name}")
     }
 }
 
 interface OnItemClickListener {
-    fun onClick(item: Item)
+    fun onClick(item: GroceryItemFull)
 }
 
-interface OnAddItemToGroceryListClickedListener {
-    fun onAddItemToGroceryListClick(item: Item)
-}
