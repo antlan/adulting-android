@@ -34,7 +34,7 @@ class InventoryFragment : Fragment(), IInventoryView, OnItemClickListener,
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val scope = getKoin().createScope(
+        val scope = getKoin().getOrCreateScope(
             Scope.INVENTORY_MODULE_SCOPE.name,
             named(Scope.INVENTORY_MODULE_SCOPE.name)
         )
@@ -102,7 +102,8 @@ class InventoryFragment : Fragment(), IInventoryView, OnItemClickListener,
 
 class InventoryItemListAdapter : RecyclerView.Adapter<ItemViewHolder>() {
 
-    private val list: ArrayList<Item> = ArrayList()
+    private val list: ArrayList<String> = ArrayList()
+    private val map: HashMap<String, Item> = HashMap()
     private var listener: OnItemClickListener? = null
     private var onAddToGroceryListener: OnAddItemToGroceryListClickedListener? = null
 
@@ -112,7 +113,7 @@ class InventoryItemListAdapter : RecyclerView.Adapter<ItemViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        val item = list[position]
+        val item = map[list[position]]!!
         holder.bind(item)
         holder.binding.name.setOnClickListener {
             Timber.d("bind clicked")
@@ -125,12 +126,16 @@ class InventoryItemListAdapter : RecyclerView.Adapter<ItemViewHolder>() {
     }
 
     override fun getItemCount(): Int {
-        return list.size
+        return map.size
     }
 
     fun setItems(items: List<Item>) {
+        map.clear()
         list.clear()
-        list.addAll(items)
+        for (item in items) {
+            map[item.id] = item
+            list.add(item.id)
+        }
         notifyDataSetChanged()
     }
 

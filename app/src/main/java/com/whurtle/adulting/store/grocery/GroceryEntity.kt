@@ -7,6 +7,10 @@ import com.whurtle.adulting.store.inventory.Item
 import kotlinx.parcelize.Parcelize
 
 
+const val GROCERY_ENTRY_STATUS_PENDING = "pending"
+const val GROCERY_ENTRY_STATUS_DONE = "done"
+const val GROCERY_ENTRY_STATUS_DROP = "drop"
+
 @Parcelize
 @Entity(
     tableName = "grocery_item",
@@ -20,15 +24,16 @@ import kotlinx.parcelize.Parcelize
     ],
     indices = [Index("item_id")]
 )
-data class GroceryItem(
+data class GroceryEntry(
     @PrimaryKey val id: String,
     @ColumnInfo(name = "target_quantity") val targetQuantity: Float,
     @ColumnInfo(name = "item_id") val itemId: String,
+    @ColumnInfo(name = "status", defaultValue = GROCERY_ENTRY_STATUS_PENDING) val status: String,
 ) : Parcelable
 
 @Parcelize
-data class GroceryItemFull(
-    @Embedded val groceryItem: GroceryItem,
+data class GroceryItem(
+    @Embedded val groceryEntry: GroceryEntry,
 
     @Relation(
         parentColumn = "item_id",

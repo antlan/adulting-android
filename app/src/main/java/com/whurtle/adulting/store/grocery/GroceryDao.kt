@@ -9,17 +9,17 @@ interface GroceryDao {
 
     @Transaction
     @Query("SELECT * FROM grocery_item WHERE id = :id")
-    fun getGroceryItemById(id: String): Single<GroceryItemFull>
+    fun getGroceryItemById(id: String): Single<GroceryItem>
 
     @Transaction
     @Query("SELECT * FROM grocery_item LIMIT :limit OFFSET :offset")
-    fun getAllGroceryItems(limit: Int, offset: Int): Single<List<GroceryItemFull>>
+    fun getAllGroceryItems(limit: Int, offset: Int): Single<List<GroceryItem>>
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    fun insertGroceryItem(item: GroceryItem): Completable
+    fun insertGroceryItem(entry: GroceryEntry): Completable
 
     @Update
-    fun updateGroceryItem(item: GroceryItem): Completable
+    fun updateGroceryItem(entry: GroceryEntry): Completable
 
     @Query("DELETE FROM grocery_item WHERE id = :id")
     fun deleteGroceryItemById(id: String): Completable

@@ -20,7 +20,7 @@ class DashboardFragment : IDashboardView, Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val scope = getKoin().createScope(
+        val scope = getKoin().getOrCreateScope(
             Scope.DASHBOARD_MODULE_SCOPE.name,
             named(Scope.DASHBOARD_MODULE_SCOPE.name)
         )
@@ -51,7 +51,7 @@ class DashboardFragment : IDashboardView, Fragment() {
             interactor.onInventoryButtonClicked()
         }
 
-        binding.groceryButton.setOnClickListener{
+        binding.groceryButton.setOnClickListener {
             interactor.onGroceryButtonClicked()
         }
     }

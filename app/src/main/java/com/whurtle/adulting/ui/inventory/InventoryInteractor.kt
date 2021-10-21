@@ -2,17 +2,16 @@ package com.whurtle.adulting.ui.inventory
 
 import android.database.sqlite.SQLiteConstraintException
 import androidx.fragment.app.Fragment
-import com.whurtle.adulting.store.grocery.GroceryItem
+import com.whurtle.adulting.store.grocery.GROCERY_ENTRY_STATUS_PENDING
+import com.whurtle.adulting.store.grocery.GroceryEntry
 import com.whurtle.adulting.store.grocery.IGroceryStore
 import com.whurtle.adulting.store.inventory.IInventoryStore
 import com.whurtle.adulting.store.inventory.Item
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import org.koin.java.KoinJavaComponent
 import org.koin.java.KoinJavaComponent.getKoin
 import timber.log.Timber
-import java.util.*
 
 interface IInventoryInteractor {
     fun initialize(fragment: Fragment, view: IInventoryView)
@@ -58,10 +57,11 @@ class InventoryInteractor : IInventoryInteractor {
 
     override fun onAddItemToGroceryListClicked(item: Item) {
         Timber.d("onAddItemToGroceryListClicked {%s}", item.name)
-        val groceryItem = GroceryItem(
+        val groceryItem = GroceryEntry(
             id = String.format("grocery0-%s", item.id),
             targetQuantity = 1.0f,
-            itemId = item.id
+            itemId = item.id,
+            status = GROCERY_ENTRY_STATUS_PENDING
         )
 
         disposables.add(groceryStore.createItem(groceryItem)

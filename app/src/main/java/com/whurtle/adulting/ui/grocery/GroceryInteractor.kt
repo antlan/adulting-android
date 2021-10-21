@@ -2,10 +2,7 @@ package com.whurtle.adulting.ui.grocery
 
 import androidx.fragment.app.Fragment
 import com.whurtle.adulting.store.grocery.GroceryItem
-import com.whurtle.adulting.store.grocery.GroceryItemFull
 import com.whurtle.adulting.store.grocery.IGroceryStore
-import com.whurtle.adulting.store.inventory.IInventoryStore
-import com.whurtle.adulting.store.inventory.Item
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -14,7 +11,7 @@ import org.koin.java.KoinJavaComponent.getKoin
 interface IGroceryInteractor {
     fun initialize(fragment: Fragment, view: IGroceryView)
     fun onCreateItemButtonClicked()
-    fun onItemClicked(item: GroceryItemFull)
+    fun onItemClicked(item: GroceryItem)
     fun onRefreshItems()
 }
 
@@ -46,7 +43,7 @@ class GroceryInteractor : IGroceryInteractor {
         router.gotoCreateItemView()
     }
 
-    override fun onItemClicked(item: GroceryItemFull) {
+    override fun onItemClicked(item: GroceryItem) {
         router.gotoItemView(item)
     }
 

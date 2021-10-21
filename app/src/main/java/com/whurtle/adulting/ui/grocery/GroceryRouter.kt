@@ -4,16 +4,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.whurtle.adulting.R
 import com.whurtle.adulting.store.grocery.GroceryItem
-import com.whurtle.adulting.store.grocery.GroceryItemFull
-import com.whurtle.adulting.store.inventory.Item
 import com.whurtle.adulting.ui.inventory.item.create.CreateItemFragment
-import com.whurtle.adulting.ui.inventory.item.view.ViewItemFragment
 import java.lang.ref.WeakReference
 
 interface IGroceryRouter {
     fun setWeakReference(reference: Fragment)
     fun gotoCreateItemView()
-    fun gotoItemView(item: GroceryItemFull)
+    fun gotoItemView(item: GroceryItem)
 
 }
 
@@ -40,7 +37,7 @@ class GroceryRouter : IGroceryRouter {
             .commit()
     }
 
-    override fun gotoItemView(item: GroceryItemFull) {
+    override fun gotoItemView(item: GroceryItem) {
 //
 //        val fragment = ViewItemFragment.newInstance(item)
 //        val fragmentManager: FragmentManager =

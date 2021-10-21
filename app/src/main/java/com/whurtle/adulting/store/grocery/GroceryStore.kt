@@ -7,23 +7,23 @@ import org.koin.java.KoinJavaComponent.getKoin
 
 interface IGroceryStore {
 
-    fun createItem(item: GroceryItem): Completable
-    fun getItem(id: String): Single<GroceryItemFull>
+    fun createItem(entry: GroceryEntry): Completable
+    fun getItem(id: String): Single<GroceryItem>
     fun deleteItem(id: String): Completable
-    fun updateItem(item: GroceryItem): Completable
-    fun getAllItems(limit: Int, offset: Int): Single<List<GroceryItemFull>>
+    fun updateItem(entry: GroceryEntry): Completable
+    fun getAllItems(limit: Int, offset: Int): Single<List<GroceryItem>>
 }
 
 class GroceryStore : IGroceryStore {
     private val database: AppRoomDatabase = getKoin().get()
 
-    var items: HashMap<String, GroceryItem> = HashMap()
+    var items: HashMap<String, GroceryEntry> = HashMap()
 
-    override fun createItem(item: GroceryItem): Completable {
-        return database.groceryDao().insertGroceryItem(item)
+    override fun createItem(entry: GroceryEntry): Completable {
+        return database.groceryDao().insertGroceryItem(entry)
     }
 
-    override fun getItem(id: String): Single<GroceryItemFull> {
+    override fun getItem(id: String): Single<GroceryItem> {
         return database.groceryDao().getGroceryItemById(id)
     }
 
@@ -31,11 +31,11 @@ class GroceryStore : IGroceryStore {
         return database.groceryDao().deleteGroceryItemById(id)
     }
 
-    override fun updateItem(item: GroceryItem): Completable {
-        return database.groceryDao().updateGroceryItem(item)
+    override fun updateItem(entry: GroceryEntry): Completable {
+        return database.groceryDao().updateGroceryItem(entry)
     }
 
-    override fun getAllItems(limit: Int, offset: Int): Single<List<GroceryItemFull>> {
+    override fun getAllItems(limit: Int, offset: Int): Single<List<GroceryItem>> {
         return database.groceryDao().getAllGroceryItems(limit, offset)
     }
 }

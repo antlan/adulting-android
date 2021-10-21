@@ -38,7 +38,7 @@ class ViewItemFragment : IViewItemView, Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val scope = getKoin().createScope(
+        val scope = getKoin().getOrCreateScope(
             Scope.VIEW_ITEM_MODULE_SCOPE.name,
             named(Scope.VIEW_ITEM_MODULE_SCOPE.name)
         )

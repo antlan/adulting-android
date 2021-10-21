@@ -26,7 +26,7 @@ class CreateItemFragment : ICreateItemView, Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val scope = getKoin().createScope(
+        val scope = getKoin().getOrCreateScope(
             Scope.CREATE_ITEM_MODULE_SCOPE.name,
             named(Scope.CREATE_ITEM_MODULE_SCOPE.name)
         )

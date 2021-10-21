@@ -12,21 +12,18 @@ interface IMainView {
 
 class MainActivity : IMainView, AppCompatActivity() {
 
-    val presenter: IMainPresenter
-    val router: IMainRouter
-    val interactor: IMainInteractor
+    private val interactor: IMainInteractor
 
     init {
-        var scope =
-            getKoin().createScope(Scope.MAIN_MODULE_SCOPE.name, named(Scope.MAIN_MODULE_SCOPE.name))
-        presenter = scope.get()
-        router = scope.get()
+        val scope = getKoin().getOrCreateScope(
+            Scope.MAIN_MODULE_SCOPE.name,
+            named(Scope.MAIN_MODULE_SCOPE.name)
+        )
         interactor = scope.get()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        router.setWeakReference(this)
         setContentView(R.layout.main_activity)
     }
 
@@ -37,12 +34,10 @@ class MainActivity : IMainView, AppCompatActivity() {
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        presenter.attach(this)
-        interactor.initialize()
+        interactor.initialize(this, this)
     }
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        presenter.detach()
     }
 }

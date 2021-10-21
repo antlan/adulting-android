@@ -1,12 +1,10 @@
 package com.whurtle.adulting.ui.grocery
 
 import com.whurtle.adulting.store.grocery.GroceryItem
-import com.whurtle.adulting.store.grocery.GroceryItemFull
-import com.whurtle.adulting.store.inventory.Item
 
 interface IGroceryPresenter {
     fun setView(view: IGroceryView)
-    fun setInventoryListItems(items: List<GroceryItemFull>)
+    fun setInventoryListItems(items: List<GroceryItem>)
     fun clearListItems()
 }
 
@@ -19,7 +17,7 @@ class GroceryPresenter : IGroceryPresenter {
     }
 
 
-    override fun setInventoryListItems(items: List<GroceryItemFull>) {
+    override fun setInventoryListItems(items: List<GroceryItem>) {
         view.setInventoryListItems(items)
     }
 

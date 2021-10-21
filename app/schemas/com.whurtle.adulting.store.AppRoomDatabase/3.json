@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 3,
-    "identityHash": "ab0b721e565fac44866d4deef61f91f4",
+    "identityHash": "fea8ec019bc6f563baeee973e82b673d",
     "entities": [
       {
         "tableName": "item",
@@ -44,7 +44,7 @@
       },
       {
         "tableName": "grocery_item",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `target_quantity` REAL NOT NULL, `item_id` TEXT NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`item_id`) REFERENCES `item`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `target_quantity` REAL NOT NULL, `item_id` TEXT NOT NULL, `status` TEXT NOT NULL DEFAULT 'pending', PRIMARY KEY(`id`), FOREIGN KEY(`item_id`) REFERENCES `item`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -63,6 +63,13 @@
             "columnName": "item_id",
             "affinity": "TEXT",
             "notNull": true
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "'pending'"
           }
         ],
         "primaryKey": {
@@ -100,7 +107,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ab0b721e565fac44866d4deef61f91f4')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fea8ec019bc6f563baeee973e82b673d')"
     ]
   }
 }

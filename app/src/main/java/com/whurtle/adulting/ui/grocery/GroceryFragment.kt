@@ -9,11 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.whurtle.adulting.databinding.GroceryFragmentBinding
 import com.whurtle.adulting.databinding.GroceryFragmentListItemBinding
-import com.whurtle.adulting.databinding.InventoryFragmentBinding
-import com.whurtle.adulting.databinding.InventoryFragmentListItemBinding
 import com.whurtle.adulting.store.grocery.GroceryItem
-import com.whurtle.adulting.store.grocery.GroceryItemFull
-import com.whurtle.adulting.store.inventory.Item
 import org.koin.android.ext.android.getKoin
 import org.koin.core.qualifier.named
 import timber.log.Timber
@@ -21,7 +17,7 @@ import timber.log.Timber
 
 interface IGroceryView {
 
-    fun setInventoryListItems(items: List<GroceryItemFull>)
+    fun setInventoryListItems(items: List<GroceryItem>)
     fun clearListItems()
 
 }
@@ -35,7 +31,7 @@ class GroceryFragment : Fragment(), IGroceryView, OnItemClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val scope = getKoin().createScope(
+        val scope = getKoin().getOrCreateScope(
             Scope.INVENTORY_MODULE_SCOPE.name,
             named(Scope.INVENTORY_MODULE_SCOPE.name)
         )
@@ -72,7 +68,7 @@ class GroceryFragment : Fragment(), IGroceryView, OnItemClickListener {
         adapter.setItemClickListener(this)
     }
 
-    override fun setInventoryListItems(items: List<GroceryItemFull>) {
+    override fun setInventoryListItems(items: List<GroceryItem>) {
         Timber.d("From db ${items.size}")
         with(adapter) {
             setItems(items)
@@ -82,7 +78,7 @@ class GroceryFragment : Fragment(), IGroceryView, OnItemClickListener {
     override fun clearListItems() {
     }
 
-    override fun onClick(item: GroceryItemFull) {
+    override fun onClick(item: GroceryItem) {
         interactor.onItemClicked(item)
     }
 }
@@ -90,7 +86,7 @@ class GroceryFragment : Fragment(), IGroceryView, OnItemClickListener {
 
 class InventoryItemListAdapter : RecyclerView.Adapter<ItemViewHolder>() {
 
-    private val list: ArrayList<GroceryItemFull> = ArrayList()
+    private val list: ArrayList<GroceryItem> = ArrayList()
     private var listener: OnItemClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -111,7 +107,7 @@ class InventoryItemListAdapter : RecyclerView.Adapter<ItemViewHolder>() {
         return list.size
     }
 
-    fun setItems(items: List<GroceryItemFull>) {
+    fun setItems(items: List<GroceryItem>) {
         list.clear()
         list.addAll(items)
         notifyDataSetChanged()
@@ -125,21 +121,22 @@ class InventoryItemListAdapter : RecyclerView.Adapter<ItemViewHolder>() {
 class ItemViewHolder(var binding: GroceryFragmentListItemBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(item: GroceryItemFull) {
+    fun bind(item: GroceryItem) {
         binding.name.text = item.item.name
-//        if (item.quantity == 0.0f) {
-//            binding.stockCount.text = "x0"
-//        } else if (item.quantity % 1.0 == 0.0) {
-//            binding.stockCount.text = String.format("x%d", item.quantity.toLong())
-//        } else {
-//            binding.stockCount.text = String.format("x%0.2f", item.quantity)
-//        }
+        val quantity = item.groceryEntry.targetQuantity
+        if (quantity == 0.0f) {
+            binding.stockCount.text = "x0"
+        } else if (quantity % 1.0 == 0.0) {
+            binding.stockCount.text = String.format("x%d", quantity.toLong())
+        } else {
+            binding.stockCount.text = String.format("x%0.2f", quantity)
+        }
 
         Timber.d("binding item ${item.item.name}")
     }
 }
 
 interface OnItemClickListener {
-    fun onClick(item: GroceryItemFull)
+    fun onClick(item: GroceryItem)
 }
 
