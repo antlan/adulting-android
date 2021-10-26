@@ -25,6 +25,7 @@ class MainActivity : IMainView, AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
+        interactor.initialize(this, this)
     }
 
     override fun onDestroy() {
@@ -34,7 +35,6 @@ class MainActivity : IMainView, AppCompatActivity() {
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        interactor.initialize(this, this)
     }
 
     override fun onDetachedFromWindow() {

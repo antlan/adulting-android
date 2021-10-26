@@ -9,6 +9,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/name"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Name"
@@ -18,13 +19,13 @@
         <androidx.appcompat.widget.AppCompatAutoCompleteTextView
             android:id="@+id/name_input"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:enabled="false" />
+            android:layout_height="wrap_content" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/extra"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Extra (Notes)"
@@ -40,6 +41,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/quantity"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Quantity"
@@ -55,10 +57,18 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
+        android:id="@+id/reset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reset"
+        app:layout_constraintRight_toLeftOf="@id/submit"
+        app:layout_constraintTop_toBottomOf="@id/quantity" />
+
+    <Button
         android:id="@+id/submit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Submit"
+        android:text="Update"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/quantity" />
 

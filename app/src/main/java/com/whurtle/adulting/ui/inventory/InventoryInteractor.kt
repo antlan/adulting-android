@@ -2,7 +2,6 @@ package com.whurtle.adulting.ui.inventory
 
 import android.database.sqlite.SQLiteConstraintException
 import androidx.fragment.app.Fragment
-import com.whurtle.adulting.store.grocery.GROCERY_ENTRY_STATUS_PENDING
 import com.whurtle.adulting.store.grocery.GroceryEntry
 import com.whurtle.adulting.store.grocery.IGroceryStore
 import com.whurtle.adulting.store.inventory.IInventoryStore
@@ -61,7 +60,7 @@ class InventoryInteractor : IInventoryInteractor {
             id = String.format("grocery0-%s", item.id),
             targetQuantity = 1.0f,
             itemId = item.id,
-            status = GROCERY_ENTRY_STATUS_PENDING
+            status = GroceryEntry.GROCERY_ENTRY_STATUS_PENDING
         )
 
         disposables.add(groceryStore.createItem(groceryItem)

@@ -11,6 +11,7 @@
     <dimen name="space_xxxxxlarge">32dp</dimen>
 
     <dimen name="width_border">1dp</dimen>
+    <dimen name="width_min_text_box">80dp</dimen>
 
     <dimen name="image_drawer">20dp</dimen>
     <dimen name="image_chevron_right">16dp</dimen>

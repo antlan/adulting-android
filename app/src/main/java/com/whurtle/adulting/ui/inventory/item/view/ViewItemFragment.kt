@@ -13,12 +13,10 @@ import org.koin.core.qualifier.named
 
 
 interface IViewItemView {
+    fun populateView(item: Item?)
 }
 
 class ViewItemFragment : IViewItemView, Fragment() {
-
-
-    private var item: Item? = null
 
     private lateinit var binding: ViewItemFragmentBinding
 
@@ -44,8 +42,8 @@ class ViewItemFragment : IViewItemView, Fragment() {
         )
         interactor = scope.get()
 
-        item = arguments?.getParcelable(KEY_ITEM)
-
+        val item: Item? = arguments?.getParcelable(KEY_ITEM)
+        interactor.setItemEntry(item)
     }
 
     override fun onDestroy() {
@@ -70,13 +68,31 @@ class ViewItemFragment : IViewItemView, Fragment() {
     fun initializeView() {
         val adapter: ArrayAdapter<String> =
             ArrayAdapter(this.requireContext(), android.R.layout.simple_list_item_1)
-        binding.nameInput.setText(item?.name)
+        adapter.add("Apple")
         binding.nameInput.setAdapter(adapter)
         binding.submit.setOnClickListener {
             val name = binding.nameInput.text.toString()
             val extra = binding.extra.editText?.text.toString()
             val quantity = binding.quantity.editText?.text.toString()
-            interactor.createItem(name, extra, quantity)
+            interactor.updateItem(name, extra, quantity)
         }
+
+        binding.reset.setOnClickListener {
+            interactor.resetForm()
+        }
+    }
+
+    override fun populateView(item: Item?) {
+        binding.nameInput.setText(item?.name)
+        binding.extraInput.setText(item?.extra)
+
+        var formattedQuantity = "0"
+        if (item!!.quantity % 1.0 == 0.0) {
+            formattedQuantity = String.format("%d", item.quantity.toLong())
+        } else if (item.quantity > 0) {
+            formattedQuantity = String.format("%0.2f", item.quantity)
+        }
+
+        binding.quantityInput.setText(formattedQuantity)
     }
 }

@@ -1,5 +1,7 @@
 package com.whurtle.adulting.ui.inventory.item.view
 
+import com.whurtle.adulting.store.inventory.Item
+
 interface IViewItemPresenter {
 
     fun setView(view: IViewItemView)
@@ -7,6 +9,7 @@ interface IViewItemPresenter {
     fun showMessage(message: String)
 
     fun showError(message: String)
+    fun populateView(item: Item?)
 }
 
 class ViewItemPresenter : IViewItemPresenter {
@@ -24,6 +27,10 @@ class ViewItemPresenter : IViewItemPresenter {
 
     override fun showError(message: String) {
         //TODO("Not yet implemented")
+    }
+
+    override fun populateView(item: Item?) {
+        view.populateView(item)
     }
 
 }

@@ -15,4 +15,21 @@ data class Item(
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "extra") val extra: String?,
     @ColumnInfo(name = "quantity") val quantity: Float
-) : Parcelable
+) : Parcelable {
+
+    companion object Utils {
+        fun normalizeNumber(number: Float): String {
+            return when {
+                number == 0.0f -> {
+                    "0"
+                }
+                number % 1.0 == 0.0 -> {
+                    String.format("%d", number.toLong())
+                }
+                else -> {
+                    String.format("%0.2f", number)
+                }
+            }
+        }
+    }
+}

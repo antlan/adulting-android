@@ -13,11 +13,15 @@ import java.util.*
 
 interface IViewItemInteractor {
     fun initialize(fragment: Fragment, view: IViewItemView)
-    fun createItem(name: String, extra: String, quantity: String)
+    fun setItemEntry(item: Item?)
+    fun updateItem(name: String, extra: String, quantity: String)
     fun shutdown()
+    fun resetForm()
 }
 
 class ViewItemInteractor : IViewItemInteractor {
+
+    private var item: Item? = null
 
     private var router: IViewItemRouter
     private var presenter: IViewItemPresenter
@@ -35,13 +39,18 @@ class ViewItemInteractor : IViewItemInteractor {
         disposables.dispose()
     }
 
+
     override fun initialize(fragment: Fragment, view: IViewItemView) {
         router.setWeakReference(fragment)
         presenter.setView(view)
+        presenter.populateView(item)
     }
 
+    override fun setItemEntry(item: Item?) {
+        this.item = item
+    }
 
-    override fun createItem(name: String, extra: String, quantity: String) {
+    override fun updateItem(name: String, extra: String, quantity: String) {
 
         var valid = true
 
@@ -51,21 +60,21 @@ class ViewItemInteractor : IViewItemInteractor {
         }
 
         if (valid) {
-            var item = Item(
-                UUID.randomUUID().toString(),
+            var updateItem = Item(
+                item!!.id,
                 name,
                 extra,
                 quantity.toFloat()
             )
 
-            Timber.d("Item: $item")
+            Timber.d("Item: $updateItem")
 
             disposables.add(
-                inventoryStore.createItem(item)
+                inventoryStore.updateItem(updateItem)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnComplete {
-                        presenter.showMessage("Item Created")
+                        presenter.showMessage("Item Updated")
                         router.goBack()
                     }
                     .doOnError {
@@ -73,8 +82,12 @@ class ViewItemInteractor : IViewItemInteractor {
                     }
                     .subscribe()
             )
-            Timber.d("Item Created")
+            Timber.d("Item Updated")
         }
+    }
+
+    override fun resetForm() {
+        presenter.populateView(item)
     }
 
 }

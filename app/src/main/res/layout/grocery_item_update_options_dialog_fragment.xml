@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorDefaultBackground">
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/vertical_guideline_begin"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/space_xxxxxlarge"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/vertical_guideline_end"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/space_xxxlarge"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal_guideline_begin"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="@dimen/space_xxxxxlarge" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal_guideline_end"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="@dimen/space_xxxxxlarge"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="@id/vertical_guideline_begin"
+        app:layout_constraintRight_toRightOf="@id/vertical_guideline_end"
+        app:layout_constraintTop_toTopOf="@id/horizontal_guideline_begin"
+        tools:text="Apple" />
+
+    <Button
+        android:id="@+id/delete"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorTransparent"
+        android:text="X"
+        android:textColor="@color/colorPrimaryDark"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/decreaseQuantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="-"
+        app:layout_constraintBottom_toBottomOf="@id/targetQuantity"
+        app:layout_constraintLeft_toLeftOf="@id/vertical_guideline_begin"
+        app:layout_constraintRight_toLeftOf="@id/targetQuantity"
+        app:layout_constraintTop_toTopOf="@id/targetQuantity" />
+
+    <Button
+        android:id="@+id/increaseQuantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+"
+        app:layout_constraintBottom_toBottomOf="@id/targetQuantity"
+        app:layout_constraintLeft_toRightOf="@id/targetQuantity"
+        app:layout_constraintRight_toRightOf="@id/vertical_guideline_end"
+        app:layout_constraintTop_toTopOf="@id/targetQuantity" />
+
+
+    <EditText
+        android:id="@+id/targetQuantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:cursorVisible="false"
+        android:gravity="center"
+        android:inputType="number"
+        android:minWidth="@dimen/width_min_text_box"
+        app:layout_constraintLeft_toRightOf="@id/decreaseQuantity"
+        app:layout_constraintRight_toLeftOf="@id/increaseQuantity"
+        app:layout_constraintTop_toBottomOf="@id/name"
+        tools:text="100" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/status"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="@id/vertical_guideline_begin"
+        app:layout_constraintRight_toRightOf="@id/vertical_guideline_end"
+        app:layout_constraintTop_toBottomOf="@id/targetQuantity">
+
+        <AutoCompleteTextView
+            android:id="@+id/statusChoices"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            android:maxLines="1"
+            tools:text="Pending" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/submit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Update"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal_guideline_end"
+        app:layout_constraintLeft_toLeftOf="@id/vertical_guideline_begin"
+        app:layout_constraintRight_toRightOf="@id/vertical_guideline_end"
+        app:layout_constraintTop_toBottomOf="@id/status">
+
+        <requestFocus />
+    </Button>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

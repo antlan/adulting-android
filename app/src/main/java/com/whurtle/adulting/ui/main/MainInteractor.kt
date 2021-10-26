@@ -20,9 +20,9 @@ class MainInteractor : IMainInteractor {
     }
 
     override fun initialize(activity: AppCompatActivity, view: IMainView) {
-        router.loadDefaultFragment()
         router.setWeakReference(activity)
         presenter.attach(view)
+        router.loadDefaultFragment()
     }
 
 }

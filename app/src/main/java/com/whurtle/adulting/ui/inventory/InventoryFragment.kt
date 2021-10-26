@@ -153,14 +153,7 @@ class ItemViewHolder(var binding: InventoryFragmentListItemBinding) :
 
     fun bind(item: Item) {
         binding.name.text = item.name
-        if (item.quantity == 0.0f) {
-            binding.stockCount.text = "x0"
-        } else if (item.quantity % 1.0 == 0.0) {
-            binding.stockCount.text = String.format("x%d", item.quantity.toLong())
-        } else {
-            binding.stockCount.text = String.format("x%0.2f", item.quantity)
-        }
-
+        binding.stockCount.text = Item.normalizeNumber(item.quantity)
         Timber.d("binding item ${item.name}")
     }
 }

@@ -1,6 +1,9 @@
 package com.whurtle.adulting.ui.grocery
 
+import android.content.ClipData
 import androidx.fragment.app.Fragment
+import androidx.room.ColumnInfo
+import com.whurtle.adulting.store.grocery.GroceryEntry
 import com.whurtle.adulting.store.grocery.GroceryItem
 import com.whurtle.adulting.store.grocery.IGroceryStore
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -13,6 +16,8 @@ interface IGroceryInteractor {
     fun onCreateItemButtonClicked()
     fun onItemClicked(item: GroceryItem)
     fun onRefreshItems()
+    fun onGroceryItemUpdateClicked(groceryEntry: GroceryEntry)
+    fun onGroceryItemDeleteClicked(groceryEntry: GroceryEntry)
 }
 
 class GroceryInteractor : IGroceryInteractor {
@@ -44,7 +49,7 @@ class GroceryInteractor : IGroceryInteractor {
     }
 
     override fun onItemClicked(item: GroceryItem) {
-        router.gotoItemView(item)
+        presenter.showUpdateOptions(item)
     }
 
     override fun onRefreshItems() {
@@ -56,6 +61,28 @@ class GroceryInteractor : IGroceryInteractor {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { list ->
                 presenter.setInventoryListItems(list)
+            }
+        )
+    }
+
+    override fun onGroceryItemUpdateClicked(
+        groceryEntry: GroceryEntry
+    ) {
+        disposables.add(groceryStore.updateItem(groceryEntry)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                presenter.refreshItemDuetoUpdate(groceryEntry)
+            }
+        )
+    }
+
+    override fun onGroceryItemDeleteClicked(groceryEntry: GroceryEntry) {
+        disposables.add(groceryStore.deleteItem(groceryEntry.id)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                presenter.refreshItemDuetoDelete(groceryEntry)
             }
         )
     }
