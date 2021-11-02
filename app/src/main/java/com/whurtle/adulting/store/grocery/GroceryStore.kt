@@ -12,12 +12,11 @@ interface IGroceryStore {
     fun deleteItem(id: String): Completable
     fun updateItem(entry: GroceryEntry): Completable
     fun getAllItems(limit: Int, offset: Int): Single<List<GroceryItem>>
+    fun getAllItemsWithStatus(status: String): Single<List<GroceryItem>>
 }
 
 class GroceryStore : IGroceryStore {
     private val database: AppRoomDatabase = getKoin().get()
-
-    var items: HashMap<String, GroceryEntry> = HashMap()
 
     override fun createItem(entry: GroceryEntry): Completable {
         return database.groceryDao().insertGroceryItem(entry)
@@ -37,5 +36,9 @@ class GroceryStore : IGroceryStore {
 
     override fun getAllItems(limit: Int, offset: Int): Single<List<GroceryItem>> {
         return database.groceryDao().getAllGroceryItems(limit, offset)
+    }
+
+    override fun getAllItemsWithStatus(status: String): Single<List<GroceryItem>> {
+        return database.groceryDao().getAllGroceryItemsWithStatus(status)
     }
 }

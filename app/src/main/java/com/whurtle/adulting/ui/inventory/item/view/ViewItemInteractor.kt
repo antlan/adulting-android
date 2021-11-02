@@ -4,6 +4,7 @@ import android.text.TextUtils
 import androidx.fragment.app.Fragment
 import com.whurtle.adulting.store.inventory.IInventoryStore
 import com.whurtle.adulting.store.inventory.Item
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers

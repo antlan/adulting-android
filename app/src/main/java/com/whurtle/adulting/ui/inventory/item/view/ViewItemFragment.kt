@@ -90,7 +90,7 @@ class ViewItemFragment : IViewItemView, Fragment() {
         if (item!!.quantity % 1.0 == 0.0) {
             formattedQuantity = String.format("%d", item.quantity.toLong())
         } else if (item.quantity > 0) {
-            formattedQuantity = String.format("%0.2f", item.quantity)
+            formattedQuantity = String.format("%.2f", item.quantity)
         }
 
         binding.quantityInput.setText(formattedQuantity)

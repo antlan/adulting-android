@@ -28,10 +28,13 @@
     <dimen name="text_medium_value">28sp</dimen>
     <dimen name="text_big_value">36sp</dimen>
     <dimen name="text_header_button">14sp</dimen>
+    <dimen name="text_list_quantity">14sp</dimen>
 
     <dimen name="elevation_default">4dp</dimen>
     <dimen name="radius_default">4dp</dimen>
-    <dimen name="radius_medium">16dp</dimen>
+    <dimen name="radius_medium">8dp</dimen>
+    <dimen name="radius_large">16dp</dimen>
     <dimen name="header_height">50dp</dimen>
     <dimen name="short_list_height">350dp</dimen>
+    <dimen name="grocery_status_box_width">18dp</dimen>
 </resources>

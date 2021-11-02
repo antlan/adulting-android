@@ -5,6 +5,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
+import java.text.DecimalFormat
 
 
 @Parcelize
@@ -18,6 +19,9 @@ data class Item(
 ) : Parcelable {
 
     companion object Utils {
+
+        val decimalFormat = DecimalFormat("#.#")
+
         fun normalizeNumber(number: Float): String {
             return when {
                 number == 0.0f -> {
@@ -27,7 +31,7 @@ data class Item(
                     String.format("%d", number.toLong())
                 }
                 else -> {
-                    String.format("%0.2f", number)
+                    decimalFormat.format(number)
                 }
             }
         }

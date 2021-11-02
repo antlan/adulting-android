@@ -10,6 +10,7 @@ interface IGroceryPresenter {
     fun showUpdateOptions(item: GroceryItem)
     fun refreshItemDuetoUpdate(groceryEntry: GroceryEntry)
     fun refreshItemDuetoDelete(groceryEntry: GroceryEntry)
+    fun doneProcessingCompleted()
 }
 
 class GroceryPresenter : IGroceryPresenter {
@@ -39,5 +40,9 @@ class GroceryPresenter : IGroceryPresenter {
 
     override fun refreshItemDuetoDelete(groceryEntry: GroceryEntry) {
         view.deleteGroceryItem(groceryEntry)
+    }
+
+    override fun doneProcessingCompleted() {
+        view.showProcessingComplete()
     }
 }

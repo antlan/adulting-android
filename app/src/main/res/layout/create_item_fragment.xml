@@ -4,16 +4,50 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorDefaultBackground">
+    android:background="@color/colorDefaultBackground"
+    android:clickable="true">
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/vertical_guideline_begin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/space_medium" />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/vertical_guideline_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/space_medium" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal_guideline_begin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="@dimen/space_medium" />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal_guideline_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="@dimen/space_medium" />
 
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/name"
-        android:layout_width="match_parent"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Name"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintLeft_toLeftOf="@id/vertical_guideline_begin"
+        app:layout_constraintRight_toRightOf="@id/vertical_guideline_end"
+        app:layout_constraintTop_toTopOf="@id/horizontal_guideline_begin">
 
         <androidx.appcompat.widget.AppCompatAutoCompleteTextView
             android:id="@+id/name_input"
@@ -24,10 +58,12 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/extra"
-        android:layout_width="match_parent"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Extra (Notes)"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/vertical_guideline_begin"
+        app:layout_constraintRight_toRightOf="@id/vertical_guideline_end"
         app:layout_constraintTop_toBottomOf="@id/name">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -39,17 +75,19 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/quantity"
-        android:layout_width="match_parent"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Quantity"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/vertical_guideline_begin"
+        app:layout_constraintRight_toRightOf="@id/vertical_guideline_end"
         app:layout_constraintTop_toBottomOf="@id/extra">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/quantity_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="number" />
+            android:inputType="numberDecimal" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -57,8 +95,9 @@
         android:id="@+id/submit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_large"
         android:text="Submit"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintRight_toRightOf="@id/vertical_guideline_end"
         app:layout_constraintTop_toBottomOf="@id/quantity" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

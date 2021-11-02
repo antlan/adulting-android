@@ -15,6 +15,10 @@ interface GroceryDao {
     @Query("SELECT * FROM grocery_item LIMIT :limit OFFSET :offset")
     fun getAllGroceryItems(limit: Int, offset: Int): Single<List<GroceryItem>>
 
+    @Transaction
+    @Query("SELECT * FROM grocery_item WHERE status = :status")
+    fun getAllGroceryItemsWithStatus(status: String): Single<List<GroceryItem>>
+
     @Insert(onConflict = OnConflictStrategy.ABORT)
     fun insertGroceryItem(entry: GroceryEntry): Completable
 

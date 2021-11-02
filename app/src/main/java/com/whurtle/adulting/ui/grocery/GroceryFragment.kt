@@ -1,15 +1,22 @@
 package com.whurtle.adulting.ui.grocery
 
+import android.content.res.ColorStateList
+import android.content.res.Resources
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
 import android.widget.ArrayAdapter
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.Transition
+import androidx.transition.TransitionInflater
+import androidx.transition.TransitionManager
+import com.whurtle.adulting.R
 import com.whurtle.adulting.databinding.GroceryFragmentBinding
 import com.whurtle.adulting.databinding.GroceryFragmentListItemBinding
 import com.whurtle.adulting.databinding.GroceryItemUpdateOptionsDialogFragmentBinding
@@ -19,6 +26,9 @@ import com.whurtle.adulting.store.inventory.Item
 import org.koin.android.ext.android.getKoin
 import org.koin.core.qualifier.named
 import timber.log.Timber
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
 interface IGroceryView {
@@ -28,6 +38,7 @@ interface IGroceryView {
     fun showUpdateOptions(groceryEntry: GroceryItem);
     fun updateGroceryItem(groceryEntry: GroceryEntry)
     fun deleteGroceryItem(groceryEntry: GroceryEntry)
+    fun showProcessingComplete()
 }
 
 class GroceryFragment : Fragment(), IGroceryView, OnItemClickListener {
@@ -74,48 +85,74 @@ class GroceryFragment : Fragment(), IGroceryView, OnItemClickListener {
         binding.itemList.layoutManager = LinearLayoutManager(this.requireContext())
         binding.itemList.adapter = adapter
         adapter.setItemClickListener(this)
-        val itemSwipeHelper = ItemSwipeHelper()
-        ItemTouchHelper(itemSwipeHelper).attachToRecyclerView(binding.itemList)
+//        val itemSwipeHelper = ItemSwipeHelper()
+//        ItemTouchHelper(itemSwipeHelper).attachToRecyclerView(binding.itemList)
+
+        binding.done.setOnClickListener {
+            interactor.onDoneClicked()
+        }
+
 
     }
 
     override fun setInventoryListItems(items: List<GroceryItem>) {
         Timber.d("From db ${items.size}")
-        with(adapter) {
-            setItems(items)
-        }
+        adapter.setItems(items)
+        updateStatusCounters()
     }
 
     override fun clearListItems() {
+        updateStatusCounters()
     }
 
     override fun showUpdateOptions(groceryEntry: GroceryItem) {
-        GroceryItemUpdateOptionsDialogFragment(groceryEntry, interactor).show(
-            childFragmentManager, GroceryItemUpdateOptionsDialogFragment.TAG
-        )
+        var dialog = GroceryItemUpdateOptionsDialogFragment(groceryEntry, interactor)
+        dialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogFullScreen)
+        dialog.show(childFragmentManager, GroceryItemUpdateOptionsDialogFragment.TAG)
     }
 
     override fun updateGroceryItem(groceryEntry: GroceryEntry) {
         adapter.updateItemWithId(groceryEntry)
+        updateStatusCounters()
     }
 
     override fun deleteGroceryItem(groceryEntry: GroceryEntry) {
         adapter.deleteItemWithId(groceryEntry)
+        updateStatusCounters()
+    }
+
+    override fun showProcessingComplete() {
+        updateStatusCounters()
+        interactor.resetList()
     }
 
     override fun onClick(item: GroceryItem) {
         interactor.onItemClicked(item)
     }
+
+    fun updateStatusCounters() {
+        val total = adapter.itemCount
+        val done = adapter.getItemWithStatusCount(GroceryEntry.GROCERY_ENTRY_STATUS_DONE)
+        val drop = adapter.getItemWithStatusCount(GroceryEntry.GROCERY_ENTRY_STATUS_DROP)
+
+        binding.itemsTotal.text = String.format(
+            "%s/%s", (done + drop).toString(), total.toString()
+        )
+        binding.itemsDone.text =
+            adapter.getItemWithStatusCount(GroceryEntry.GROCERY_ENTRY_STATUS_DONE).toString()
+        binding.itemsCancelled.text =
+            adapter.getItemWithStatusCount(GroceryEntry.GROCERY_ENTRY_STATUS_DROP).toString()
+    }
+
 }
 
 
 class InventoryItemListAdapter : RecyclerView.Adapter<ItemViewHolder>() {
 
-
     private val list: ArrayList<String> = ArrayList()
     private val map: HashMap<String, GroceryItem> = HashMap()
     private var listener: OnItemClickListener? = null
-
+    private var comparator = ItemComparator(map)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val binding = GroceryFragmentListItemBinding.inflate(LayoutInflater.from(parent.context))
@@ -146,6 +183,7 @@ class InventoryItemListAdapter : RecyclerView.Adapter<ItemViewHolder>() {
             map[item.groceryEntry.id] = item
             list.add(item.groceryEntry.id)
         }
+        sort()
         notifyDataSetChanged()
     }
 
@@ -157,12 +195,74 @@ class InventoryItemListAdapter : RecyclerView.Adapter<ItemViewHolder>() {
         val groceryItem = map[groceryEntry.id]
         val groceryItemUpdate = groceryItem!!.copy(groceryEntry = groceryEntry)
         map[groceryEntry.id] = groceryItemUpdate
-        notifyItemChanged(list.indexOf(groceryEntry.id))
+        var oldIndex = list.indexOf(groceryEntry.id)
+        sort()
+        val newIndex = list.indexOf(groceryEntry.id)
+        if (oldIndex != newIndex) {
+            notifyItemMoved(oldIndex, newIndex)
+        }
+        notifyItemChanged(newIndex)
     }
 
     fun deleteItemWithId(groceryEntry: GroceryEntry) {
         map.remove(groceryEntry.id)
-        notifyItemRemoved(list.indexOf(groceryEntry.id))
+        val index = list.indexOf(groceryEntry.id)
+        list.remove(groceryEntry.id)
+        notifyItemRemoved(index)
+    }
+
+    fun sort() {
+//        var unsortedList = ArrayList<String>(list)
+        Collections.sort(list, comparator)
+//        var sortedList = ArrayList<String>(list)
+//
+//        for (item in list) {
+//            Timber.d("%d, %d", oldIndex, newIndex)
+//            if (oldIndex != newIndex) {
+//                notifyItemMoved(oldIndex, newIndex)
+//                unsortedList.remove(item)
+//            }
+//        }
+    }
+
+    fun itemMoved(from: Int, to: Int) {
+        Collections.swap(list, from, to)
+        notifyItemMoved(from, to)
+    }
+
+    fun getItemWithStatusCount(status: String): Int {
+        var statusCount = 0
+        for (itemId in list) {
+            var itemStatus = map[itemId]!!.groceryEntry.status
+            if (status == itemStatus) {
+                statusCount += 1
+            }
+        }
+        return statusCount
+    }
+
+    class ItemComparator(var map: HashMap<String, GroceryItem>) : Comparator<String> {
+
+        var itemOrder: ArrayList<String> = ArrayList()
+
+        init {
+            itemOrder.add(GroceryEntry.GROCERY_ENTRY_STATUS_PENDING)
+            itemOrder.add(GroceryEntry.GROCERY_ENTRY_STATUS_DONE)
+            itemOrder.add(GroceryEntry.GROCERY_ENTRY_STATUS_DROP)
+        }
+
+        override fun compare(item1: String?, item2: String?): Int {
+            var status1 = itemOrder.indexOf(map[item1]!!.groceryEntry.status)
+            var status2 = itemOrder.indexOf(map[item2]!!.groceryEntry.status)
+            var name1 = map[item1]!!.item.name
+            var name2 = map[item2]!!.item.name
+
+            var result = status1.compareTo(status2)
+            if (result == 0) {
+                result = name1.compareTo(name2)
+            }
+            return result
+        }
     }
 }
 
@@ -171,42 +271,65 @@ class ItemViewHolder(var binding: GroceryFragmentListItemBinding) :
 
     fun bind(item: GroceryItem) {
         binding.name.text = item.item.name
-        binding.status.text = item.groceryEntry.status
         val quantity = item.groceryEntry.targetQuantity
         binding.stockCount.text = Item.normalizeNumber(quantity)
 
+        when {
+            item.groceryEntry.status == GroceryEntry.GROCERY_ENTRY_STATUS_DONE -> {
+                binding.status.setImageResource(R.drawable.ic_list_done)
+                binding.status.imageTintList = ColorStateList.valueOf(
+                    ContextCompat.getColor(
+                        binding.root.context,
+                        R.color.colorPositiveGreen
+                    )
+                )
+            }
+            item.groceryEntry.status == GroceryEntry.GROCERY_ENTRY_STATUS_DROP -> {
+                binding.status.setImageResource(R.drawable.ic_list_drop)
+                binding.status.imageTintList = ColorStateList.valueOf(
+                    ContextCompat.getColor(
+                        binding.root.context,
+                        R.color.colorNegativeRed
+                    )
+                )
+            }
+            else -> {
+                binding.status.setImageResource(0)
+            }
+
+        }
         Timber.d("binding item ${item.item.name}")
+
     }
 }
 
 interface OnItemClickListener {
     fun onClick(item: GroceryItem)
 }
-
-class ItemSwipeHelper :
-    ItemTouchHelper.SimpleCallback(
-        ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.START or ItemTouchHelper.END,
-        0
-    ) {
-    override fun onMove(
-        recyclerView: RecyclerView,
-        viewHolder: RecyclerView.ViewHolder,
-        target: RecyclerView.ViewHolder
-    ): Boolean {
-        Timber.d("moving")
-        val adapter = recyclerView.adapter as InventoryItemListAdapter
-        val from = viewHolder.adapterPosition
-        val to = target.adapterPosition
-        adapter.notifyItemMoved(from, to)
-
-        return true
-    }
-
-    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-        //nothing
-        Timber.d("swiped")
-    }
-}
+//
+//class ItemSwipeHelper :
+//    ItemTouchHelper.SimpleCallback(
+//        ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.START or ItemTouchHelper.END,
+//        0
+//    ) {
+//    override fun onMove(
+//        recyclerView: RecyclerView,
+//        viewHolder: RecyclerView.ViewHolder,
+//        target: RecyclerView.ViewHolder
+//    ): Boolean {
+//        val adapter = recyclerView.adapter as InventoryItemListAdapter
+//        val from = viewHolder.adapterPosition
+//        val to = target.adapterPosition
+//        Timber.d("moving %d, %d", from, to)
+//        adapter.itemMoved(from, to)
+//        return true
+//    }
+//
+//    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+//        //nothing
+//        Timber.d("swiped")
+//    }
+//}
 
 class GroceryItemUpdateOptionsDialogFragment(
     var item: GroceryItem,

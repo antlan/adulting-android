@@ -7,13 +7,42 @@
     android:background="@color/colorDefaultBackground"
     tools:context=".ui.main.MainActivity">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/vertical_guideline_begin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/space_medium" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/vertical_guideline_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/space_medium" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal_guideline_begin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="@dimen/space_medium" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal_guideline_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="@dimen/space_medium" />
+
+
     <Button
         android:id="@+id/inventory_create_item_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add Item"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:text="Add"
+        app:layout_constraintRight_toRightOf="@id/vertical_guideline_end"
+        app:layout_constraintTop_toTopOf="@id/horizontal_guideline_begin" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/item_list"

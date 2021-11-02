@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorDefaultBackground">
+    android:background="@color/colorDefaultBackground"
+    android:paddingLeft="@dimen/space_large"
+    android:paddingRight="@dimen/space_large">
 
 
     <androidx.constraintlayout.widget.Guideline
@@ -44,60 +46,75 @@
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="@dimen/text_big_informative"
+        app:layout_constraintBottom_toTopOf="@id/extra"
         app:layout_constraintLeft_toLeftOf="@id/vertical_guideline_begin"
         app:layout_constraintRight_toRightOf="@id/vertical_guideline_end"
         app:layout_constraintTop_toTopOf="@id/horizontal_guideline_begin"
+        app:layout_constraintVertical_chainStyle="packed"
         tools:text="Apple" />
 
-    <Button
-        android:id="@+id/delete"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/colorTransparent"
-        android:text="X"
-        android:textColor="@color/colorPrimaryDark"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/decreaseQuantity"
+    <TextView
+        android:id="@+id/extra"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="-"
-        app:layout_constraintBottom_toBottomOf="@id/targetQuantity"
-        app:layout_constraintLeft_toLeftOf="@id/vertical_guideline_begin"
-        app:layout_constraintRight_toLeftOf="@id/targetQuantity"
-        app:layout_constraintTop_toTopOf="@id/targetQuantity" />
-
-    <Button
-        android:id="@+id/increaseQuantity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="+"
-        app:layout_constraintBottom_toBottomOf="@id/targetQuantity"
-        app:layout_constraintLeft_toRightOf="@id/targetQuantity"
-        app:layout_constraintRight_toRightOf="@id/vertical_guideline_end"
-        app:layout_constraintTop_toTopOf="@id/targetQuantity" />
+        android:textSize="@dimen/text_informative"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/targetQuantity"
+        app:layout_constraintLeft_toRightOf="@id/decreaseQuantity"
+        app:layout_constraintRight_toLeftOf="@id/increaseQuantity"
+        app:layout_constraintTop_toBottomOf="@id/name"
+        tools:text="Apple" />
 
 
     <EditText
         android:id="@+id/targetQuantity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_medium"
         android:cursorVisible="false"
         android:gravity="center"
-        android:inputType="number"
+        android:inputType="numberDecimal"
         android:minWidth="@dimen/width_min_text_box"
+        app:layout_constraintBottom_toTopOf="@id/status"
         app:layout_constraintLeft_toRightOf="@id/decreaseQuantity"
         app:layout_constraintRight_toLeftOf="@id/increaseQuantity"
-        app:layout_constraintTop_toBottomOf="@id/name"
+        app:layout_constraintTop_toBottomOf="@id/extra"
         tools:text="100" />
+
+
+    <ImageButton
+        android:id="@+id/decreaseQuantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_xxxlarge"
+        android:background="@color/colorTransparent"
+        android:padding="@dimen/space_large"
+        android:src="@drawable/ic_minus"
+        app:layout_constraintBottom_toBottomOf="@id/targetQuantity"
+        app:layout_constraintLeft_toLeftOf="@id/vertical_guideline_begin"
+        app:layout_constraintRight_toLeftOf="@id/targetQuantity"
+        app:layout_constraintTop_toTopOf="@id/targetQuantity" />
+
+    <ImageButton
+        android:id="@+id/increaseQuantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/space_xxxlarge"
+        android:background="@color/colorTransparent"
+        android:padding="@dimen/space_large"
+        android:src="@drawable/ic_add"
+        app:layout_constraintBottom_toBottomOf="@id/targetQuantity"
+        app:layout_constraintLeft_toRightOf="@id/targetQuantity"
+        app:layout_constraintRight_toRightOf="@id/vertical_guideline_end"
+        app:layout_constraintTop_toTopOf="@id/targetQuantity" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/status"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/delete"
         app:layout_constraintLeft_toLeftOf="@id/vertical_guideline_begin"
         app:layout_constraintRight_toRightOf="@id/vertical_guideline_end"
         app:layout_constraintTop_toBottomOf="@id/targetQuantity">
@@ -113,6 +130,19 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
+        android:id="@+id/delete"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_large"
+        android:text="Remove"
+        app:layout_constraintBottom_toTopOf="@id/submit"
+        app:layout_constraintLeft_toLeftOf="@id/vertical_guideline_begin"
+        app:layout_constraintRight_toRightOf="@id/vertical_guideline_end"
+        app:layout_constraintTop_toBottomOf="@id/status" />
+
+
+    <Button
         android:id="@+id/submit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -120,7 +150,7 @@
         app:layout_constraintBottom_toBottomOf="@id/horizontal_guideline_end"
         app:layout_constraintLeft_toLeftOf="@id/vertical_guideline_begin"
         app:layout_constraintRight_toRightOf="@id/vertical_guideline_end"
-        app:layout_constraintTop_toBottomOf="@id/status">
+        app:layout_constraintTop_toBottomOf="@id/delete">
 
         <requestFocus />
     </Button>

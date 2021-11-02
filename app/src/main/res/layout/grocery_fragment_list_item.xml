@@ -8,17 +8,83 @@
     android:paddingRight="@dimen/space_medium"
     tools:context=".ui.main.MainActivity">
 
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/vertical_guideline_begin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/space_medium" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/vertical_guideline_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/space_medium" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal_guideline_begin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="@dimen/space_medium" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal_guideline_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="@dimen/space_medium" />
+
+    <ImageView
+        android:id="@+id/status"
+        android:layout_width="@dimen/grocery_status_box_width"
+        android:layout_height="@dimen/grocery_status_box_width"
+        android:clickable="true"
+        android:ellipsize="end"
+        android:focusable="true"
+        android:lines="1"
+        android:maxLines="1"
+        android:textSize="@dimen/text_list_item_name"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal_guideline_end"
+        app:layout_constraintLeft_toLeftOf="@id/vertical_guideline_begin"
+        app:layout_constraintRight_toLeftOf="@id/stock_count"
+        app:layout_constraintTop_toTopOf="@id/horizontal_guideline_begin"
+        tools:src="@drawable/ic_list_done" />
+
     <TextView
         android:id="@+id/stock_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="@dimen/space_medium"
+        android:textSize="@dimen/text_list_item_name"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal_guideline_end"
+        app:layout_constraintLeft_toRightOf="@id/status"
         app:layout_constraintRight_toLeftOf="@id/name"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="@id/vertical_guideline_end"
+        app:layout_constraintTop_toTopOf="@id/horizontal_guideline_begin"
         tools:text="1" />
 
     <TextView
         android:id="@+id/name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/space_small"
+        android:clickable="true"
+        android:ellipsize="end"
+        android:focusable="true"
+        android:lines="1"
+        android:maxLines="1"
+        android:textSize="@dimen/text_list_item_name"
+        app:layout_constraintBottom_toTopOf="@id/extra"
+        app:layout_constraintLeft_toRightOf="@id/stock_count"
+        app:layout_constraintRight_toRightOf="@id/vertical_guideline_end"
+        app:layout_constraintTop_toTopOf="@id/horizontal_guideline_begin"
+        tools:text="Sample of an item a asd asd asd asd asd asd asd as dasd" />
+
+    <TextView
+        android:id="@+id/extra"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/space_medium"
@@ -28,37 +94,20 @@
         android:lines="1"
         android:maxLines="1"
         android:textSize="@dimen/text_list_item_name"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal_guideline_end"
         app:layout_constraintLeft_toRightOf="@id/stock_count"
-        app:layout_constraintRight_toLeftOf="@id/status"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Sample of an item a asd asd asd asd asd asd asd as dasd " />
+        app:layout_constraintRight_toRightOf="@id/vertical_guideline_end"
+        app:layout_constraintTop_toBottomOf="@id/name" />
 
-    <TextView
-        android:id="@+id/status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/space_medium"
-        android:clickable="true"
-        android:ellipsize="end"
-        android:focusable="true"
-        android:lines="1"
-        android:maxLines="1"
-        android:textSize="@dimen/text_list_item_name"
-        app:layout_constraintLeft_toRightOf="@id/name"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Pending" />
 
     <View
         android:layout_width="wrap_content"
         android:layout_height="@dimen/width_border"
-        android:layout_marginTop="@dimen/space_medium"
-        android:layout_marginBottom="@dimen/space_medium"
         android:background="@color/colorDefaultListDivider"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/name" />
+        app:layout_constraintRight_toRightOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

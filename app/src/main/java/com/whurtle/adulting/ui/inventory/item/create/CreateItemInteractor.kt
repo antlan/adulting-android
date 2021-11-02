@@ -3,6 +3,7 @@ package com.whurtle.adulting.ui.inventory.item.create
 import android.text.TextUtils
 import com.whurtle.adulting.store.inventory.IInventoryStore
 import com.whurtle.adulting.store.inventory.Item
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -53,6 +54,7 @@ class CreateItemInteractor : ICreateItemInteractor {
             )
 
             Timber.d("Item: $item")
+
 
             disposables.add(
                 inventoryStore.createItem(item)

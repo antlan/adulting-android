@@ -4,17 +4,137 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     android:background="@color/colorDefaultBackground"
     tools:context=".ui.main.MainActivity">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/vertical_guideline_begin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/space_medium" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/vertical_guideline_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/space_medium" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal_guideline_begin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="@dimen/space_medium" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal_guideline_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="@dimen/space_medium" />
+
+    <TextView
+        android:id="@+id/items_total"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_status_circle"
+        android:paddingStart="23dp"
+        android:paddingTop="@dimen/space_small"
+        android:paddingEnd="@dimen/space_small"
+        android:paddingBottom="@dimen/space_small"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal_barrier_bottom_buttons"
+        app:layout_constraintLeft_toLeftOf="@id/vertical_guideline_begin"
+        app:layout_constraintTop_toTopOf="@id/horizontal_guideline_begin" />
+
+    <ImageView
+        android:layout_width="@dimen/grocery_status_box_width"
+        android:layout_height="@dimen/grocery_status_box_width"
+        android:layout_marginStart="@dimen/space_small"
+        android:src="@drawable/ic_list_list"
+        app:layout_constraintBottom_toBottomOf="@id/items_total"
+        app:layout_constraintLeft_toLeftOf="@id/items_total"
+        app:layout_constraintTop_toTopOf="@id/items_total" />
+
+    <TextView
+        android:id="@+id/items_done"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_small"
+        android:background="@drawable/bg_status_circle"
+        android:paddingStart="23dp"
+        android:paddingTop="@dimen/space_small"
+        android:paddingEnd="@dimen/space_small"
+        android:paddingBottom="@dimen/space_small"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal_barrier_bottom_buttons"
+        app:layout_constraintLeft_toRightOf="@id/items_total"
+        app:layout_constraintTop_toTopOf="@id/horizontal_guideline_begin" />
+
+    <ImageView
+        android:layout_width="@dimen/grocery_status_box_width"
+        android:layout_height="@dimen/grocery_status_box_width"
+        android:layout_marginStart="@dimen/space_small"
+        android:src="@drawable/ic_list_done"
+        app:layout_constraintBottom_toBottomOf="@id/items_done"
+        app:layout_constraintLeft_toLeftOf="@id/items_done"
+        app:layout_constraintTop_toTopOf="@id/items_done"
+        app:tint="@color/pastelGreen" />
+
+
+    <TextView
+        android:id="@+id/items_cancelled"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_small"
+        android:background="@drawable/bg_status_circle"
+        android:paddingStart="23dp"
+        android:paddingTop="@dimen/space_small"
+        android:paddingEnd="@dimen/space_small"
+        android:paddingBottom="@dimen/space_small"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal_barrier_bottom_buttons"
+        app:layout_constraintLeft_toRightOf="@id/items_done"
+        app:layout_constraintTop_toTopOf="@id/horizontal_guideline_begin" />
+
+    <ImageView
+        android:layout_width="@dimen/grocery_status_box_width"
+        android:layout_height="@dimen/grocery_status_box_width"
+        android:layout_marginLeft="@dimen/space_small"
+        android:src="@drawable/ic_list_drop"
+        app:layout_constraintBottom_toBottomOf="@id/items_cancelled"
+        app:layout_constraintLeft_toLeftOf="@id/items_cancelled"
+        app:layout_constraintTop_toTopOf="@id/items_cancelled"
+        app:tint="@color/colorNegativeRed" />
+
+    <Button
+        android:id="@+id/done"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableRight="@drawable/ic_proceed"
+        android:drawableTint="@color/colorDrawableTintWhite"
+        android:text="Done"
+        app:layout_constraintRight_toRightOf="@id/vertical_guideline_end"
+        app:layout_constraintTop_toTopOf="@id/horizontal_guideline_begin" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/horizontal_barrier_bottom_buttons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/done" />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/item_list"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal_guideline_end"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/inventory_fragment_list_item" />
+        app:layout_constraintTop_toBottomOf="@id/horizontal_barrier_bottom_buttons"
+        tools:listitem="@layout/grocery_fragment_list_item" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
