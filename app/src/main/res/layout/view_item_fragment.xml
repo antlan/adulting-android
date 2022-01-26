@@ -90,6 +90,118 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/display_unit"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Display Unit"
+        app:layout_constraintLeft_toLeftOf="@id/vertical_guideline_begin"
+        app:layout_constraintRight_toRightOf="@id/vertical_guideline_end"
+        app:layout_constraintTop_toBottomOf="@id/quantity">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/display_unit_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/display_icon"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:hint="Display Icon"
+        app:layout_constraintLeft_toLeftOf="@id/vertical_guideline_begin"
+        app:layout_constraintRight_toRightOf="@id/vertical_guideline_end"
+        app:layout_constraintTop_toBottomOf="@id/display_unit">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/display_icon_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/critical_quantity"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Stock Warning Quantity"
+        app:layout_constraintLeft_toLeftOf="@id/vertical_guideline_begin"
+        app:layout_constraintRight_toRightOf="@id/vertical_guideline_end"
+        app:layout_constraintTop_toBottomOf="@id/display_icon">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/critical_quantity_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/target_quantity"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Target Stock Quantity"
+        app:layout_constraintLeft_toLeftOf="@id/vertical_guideline_begin"
+        app:layout_constraintRight_toRightOf="@id/vertical_guideline_end"
+        app:layout_constraintTop_toBottomOf="@id/critical_quantity">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/target_quantity_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/consume_by_date"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Consume By Date"
+        app:layout_constraintLeft_toLeftOf="@id/vertical_guideline_begin"
+        app:layout_constraintRight_toLeftOf="@id/consume_by_date_picker"
+        app:layout_constraintTop_toBottomOf="@id/target_quantity">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/consume_by_date_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="date" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/consume_by_date_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Picker"
+        app:layout_constraintBottom_toBottomOf="@id/consume_by_date"
+        app:layout_constraintLeft_toRightOf="@id/consume_by_date"
+        app:layout_constraintRight_toRightOf="@id/vertical_guideline_end"
+        app:layout_constraintTop_toTopOf="@id/consume_by_date" />
+
+    <Button
+        android:id="@+id/delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_medium"
+        android:layout_marginRight="@dimen/space_medium"
+        android:text="Delete"
+        app:layout_constraintRight_toLeftOf="@id/reset"
+        app:layout_constraintTop_toBottomOf="@id/consume_by_date_picker" />
+
+
     <Button
         android:id="@+id/reset"
         android:layout_width="wrap_content"
@@ -98,7 +210,7 @@
         android:layout_marginRight="@dimen/space_medium"
         android:text="Reset"
         app:layout_constraintRight_toLeftOf="@id/submit"
-        app:layout_constraintTop_toBottomOf="@id/quantity" />
+        app:layout_constraintTop_toBottomOf="@id/consume_by_date_picker" />
 
     <Button
         android:id="@+id/submit"
@@ -107,6 +219,6 @@
         android:layout_marginTop="@dimen/space_medium"
         android:text="Update"
         app:layout_constraintRight_toRightOf="@id/vertical_guideline_end"
-        app:layout_constraintTop_toBottomOf="@id/quantity" />
+        app:layout_constraintTop_toBottomOf="@id/consume_by_date_picker" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

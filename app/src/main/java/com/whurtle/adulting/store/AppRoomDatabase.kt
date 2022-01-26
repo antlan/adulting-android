@@ -1,10 +1,8 @@
 package com.whurtle.adulting.store
 
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
 import android.content.Context
-import androidx.room.AutoMigration
+import androidx.room.*
+import androidx.room.migration.AutoMigrationSpec
 import com.whurtle.adulting.store.grocery.GroceryDao
 import com.whurtle.adulting.store.grocery.GroceryEntry
 import com.whurtle.adulting.store.inventory.InventoryDao
@@ -12,9 +10,11 @@ import com.whurtle.adulting.store.inventory.Item
 
 @Database(
     entities = [Item::class, GroceryEntry::class],
-    version = 2,
+    version = 4,
     autoMigrations = [
         AutoMigration(from = 1, to = 2),
+        AutoMigration(from = 2, to = 3),
+        AutoMigration(from = 3, to = 4, spec = AppRoomDatabase.Migration_3_to_4::class),
     ],
     exportSchema = true
 )
@@ -40,5 +40,9 @@ abstract class AppRoomDatabase : RoomDatabase() {
                 "app.db"
             ).build()
     }
+
+    @DeleteColumn(tableName = "item", columnName = "is_perishable")
+    class Migration_3_to_4 : AutoMigrationSpec
+
 
 }

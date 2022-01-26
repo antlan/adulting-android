@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 3,
-    "identityHash": "fea8ec019bc6f563baeee973e82b673d",
+    "identityHash": "b4ea8f4e8ead99a0a5be9d94a640f741",
     "entities": [
       {
         "tableName": "item",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `extra` TEXT, `quantity` REAL NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `extra` TEXT, `quantity` REAL NOT NULL, `display_unit` TEXT, `display_icon` INTEGER, `critical_quantity` REAL, `target_quantity` REAL, `consume_by` INTEGER, `last_modified` INTEGER, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -31,6 +31,42 @@
             "columnName": "quantity",
             "affinity": "REAL",
             "notNull": true
+          },
+          {
+            "fieldPath": "displayUnit",
+            "columnName": "display_unit",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "displayIcon",
+            "columnName": "display_icon",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "criticalQuantity",
+            "columnName": "critical_quantity",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "targetQuantity",
+            "columnName": "target_quantity",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "consumeBy",
+            "columnName": "consume_by",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lastUpdated",
+            "columnName": "last_modified",
+            "affinity": "INTEGER",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -107,7 +143,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fea8ec019bc6f563baeee973e82b673d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b4ea8f4e8ead99a0a5be9d94a640f741')"
     ]
   }
 }

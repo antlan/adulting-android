@@ -23,6 +23,7 @@ import com.whurtle.adulting.databinding.GroceryItemUpdateOptionsDialogFragmentBi
 import com.whurtle.adulting.store.grocery.GroceryEntry
 import com.whurtle.adulting.store.grocery.GroceryItem
 import com.whurtle.adulting.store.inventory.Item
+import com.whurtle.adulting.ui.common.utils.QuantityUtils
 import org.koin.android.ext.android.getKoin
 import org.koin.core.qualifier.named
 import timber.log.Timber
@@ -272,7 +273,7 @@ class ItemViewHolder(var binding: GroceryFragmentListItemBinding) :
     fun bind(item: GroceryItem) {
         binding.name.text = item.item.name
         val quantity = item.groceryEntry.targetQuantity
-        binding.stockCount.text = Item.normalizeNumber(quantity)
+        binding.stockCount.text = QuantityUtils.formatQuantity(quantity)
 
         when {
             item.groceryEntry.status == GroceryEntry.GROCERY_ENTRY_STATUS_DONE -> {
@@ -367,12 +368,12 @@ class GroceryItemUpdateOptionsDialogFragment(
 
         binding.name.text = item.item.name
         binding.targetQuantity.setText(
-            Item.normalizeNumber(item.groceryEntry.targetQuantity)
+            QuantityUtils.formatQuantity(item.groceryEntry.targetQuantity)
         )
         binding.increaseQuantity.setOnClickListener {
             var value = binding.targetQuantity.text.toString().toFloat()
             value += 1
-            binding.targetQuantity.setText(Item.normalizeNumber(value))
+            binding.targetQuantity.setText(QuantityUtils.formatQuantity(value))
         }
 
         binding.decreaseQuantity.setOnClickListener {
@@ -381,7 +382,7 @@ class GroceryItemUpdateOptionsDialogFragment(
             if (value < 0) {
                 value = 0f
             }
-            binding.targetQuantity.setText(Item.normalizeNumber(value))
+            binding.targetQuantity.setText(QuantityUtils.formatQuantity(value))
         }
 
         var currentStatus = item.groceryEntry.status

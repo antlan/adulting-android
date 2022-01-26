@@ -21,16 +21,14 @@ class ViewItemPresenter : IViewItemPresenter {
     }
 
     override fun showMessage(message: String) {
-        //TODO("Not yet implemented")
-
+        view.showMessage(message)
     }
 
     override fun showError(message: String) {
-        //TODO("Not yet implemented")
+        view.showMessage(message)
     }
 
     override fun populateView(item: Item?) {
         view.populateView(item)
     }
-
 }

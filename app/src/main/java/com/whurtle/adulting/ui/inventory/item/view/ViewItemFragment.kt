@@ -7,12 +7,18 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.whurtle.adulting.databinding.ViewItemFragmentBinding
 import android.widget.ArrayAdapter
+import com.google.android.material.snackbar.Snackbar
 import com.whurtle.adulting.store.inventory.Item
+import com.whurtle.adulting.ui.common.utils.QuantityUtils
+import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import org.koin.android.ext.android.getKoin
 import org.koin.core.qualifier.named
 
 
 interface IViewItemView {
+    fun showMessage(message: String)
     fun populateView(item: Item?)
 }
 
@@ -21,6 +27,8 @@ class ViewItemFragment : IViewItemView, Fragment() {
     private lateinit var binding: ViewItemFragmentBinding
 
     private lateinit var interactor: IViewItemInteractor
+
+    private lateinit var item: Item
 
     companion object {
         val KEY_ITEM = "item"
@@ -42,7 +50,7 @@ class ViewItemFragment : IViewItemView, Fragment() {
         )
         interactor = scope.get()
 
-        val item: Item? = arguments?.getParcelable(KEY_ITEM)
+        item = arguments?.getParcelable(KEY_ITEM)!!
         interactor.setItemEntry(item)
     }
 
@@ -65,16 +73,39 @@ class ViewItemFragment : IViewItemView, Fragment() {
         initializeView()
     }
 
+    override fun showMessage(message: String) {
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
+    }
+
     fun initializeView() {
         val adapter: ArrayAdapter<String> =
             ArrayAdapter(this.requireContext(), android.R.layout.simple_list_item_1)
         adapter.add("Apple")
         binding.nameInput.setAdapter(adapter)
+
+        binding.delete.setOnClickListener {
+            interactor.deleteItem(item)
+        }
+
         binding.submit.setOnClickListener {
             val name = binding.nameInput.text.toString()
             val extra = binding.extra.editText?.text.toString()
             val quantity = binding.quantity.editText?.text.toString()
-            interactor.updateItem(name, extra, quantity)
+            val displayUnit = binding.displayUnit.editText?.text.toString()
+            val displayIcon = binding.displayIcon.editText?.text.toString()
+            val criticalQuantity = binding.criticalQuantity.editText?.text.toString()
+            val targetQuantity = binding.targetQuantity.editText?.text.toString()
+            val consumeBy = binding.consumeByDate.editText?.text.toString()
+            interactor.updateItem(
+                name,
+                extra,
+                quantity,
+                displayUnit,
+                displayIcon,
+                criticalQuantity,
+                targetQuantity,
+                consumeBy
+            )
         }
 
         binding.reset.setOnClickListener {
@@ -86,13 +117,32 @@ class ViewItemFragment : IViewItemView, Fragment() {
         binding.nameInput.setText(item?.name)
         binding.extraInput.setText(item?.extra)
 
-        var formattedQuantity = "0"
-        if (item!!.quantity % 1.0 == 0.0) {
-            formattedQuantity = String.format("%d", item.quantity.toLong())
-        } else if (item.quantity > 0) {
-            formattedQuantity = String.format("%.2f", item.quantity)
+        binding.quantityInput.setText(QuantityUtils.formatQuantity(item?.quantity))
+
+        binding.displayUnitInput.setText(item?.displayUnit)
+
+        if (item?.displayIcon != null) {
+            binding.displayIconInput.setText(item.displayIcon.toString())
         }
 
-        binding.quantityInput.setText(formattedQuantity)
+        binding.criticalQuantityInput.setText(QuantityUtils.formatQuantity(item?.criticalQuantity))
+        binding.targetQuantityInput.setText(QuantityUtils.formatQuantity(item?.targetQuantity))
+
+
+        if (item?.consumeBy != null) {
+            val consumeByDate = Instant.fromEpochMilliseconds(item.consumeBy)
+                .toLocalDateTime(TimeZone.currentSystemDefault())
+            val dayOfMonth = consumeByDate.dayOfMonth
+            val month = consumeByDate.monthNumber
+            val year = consumeByDate.year
+            binding.consumeByDateInput.setText(
+                String.format(
+                    "%04d-%02d-%02d",
+                    year,
+                    month,
+                    dayOfMonth
+                )
+            )
+        }
     }
 }

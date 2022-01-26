@@ -11,6 +11,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.whurtle.adulting.databinding.InventoryFragmentBinding
 import com.whurtle.adulting.databinding.InventoryFragmentListItemBinding
 import com.whurtle.adulting.store.inventory.Item
+import com.whurtle.adulting.ui.common.utils.QuantityUtils
 import org.koin.android.ext.android.getKoin
 import org.koin.core.qualifier.named
 import timber.log.Timber
@@ -115,7 +116,7 @@ class InventoryItemListAdapter : RecyclerView.Adapter<ItemViewHolder>() {
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val item = map[list[position]]!!
         holder.bind(item)
-        holder.binding.name.setOnClickListener {
+        holder.binding.root.setOnClickListener {
             Timber.d("bind clicked")
             listener!!.onClick(item)
         }
@@ -153,7 +154,7 @@ class ItemViewHolder(var binding: InventoryFragmentListItemBinding) :
 
     fun bind(item: Item) {
         binding.name.text = item.name
-        binding.stockCount.text = Item.normalizeNumber(item.quantity)
+        binding.stockCount.text = QuantityUtils.formatQuantity(item.quantity)
         Timber.d("binding item ${item.name}")
     }
 }
